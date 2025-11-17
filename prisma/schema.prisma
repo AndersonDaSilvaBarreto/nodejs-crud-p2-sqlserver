@@ -1,0 +1,56 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlserver"
+  url      = env("DATABASE_URL")
+}
+
+model aircraft {
+  aircraft_id  Int      @id(map: "PK__aircraft__040153995C86FF46") @default(autoincrement())
+  model        String?  @db.VarChar(100)
+  manufacturer String?  @db.VarChar(100)
+  capacity     Int?
+  flight       flight[]
+}
+
+model boarding_pass {
+  boarding_pass_id Int        @id(map: "PK__boarding__42CCA949E2EFC9CD") @default(autoincrement())
+  seat_number      String?    @db.VarChar(5)
+  passenger_id     Int?
+  flight_id        Int?
+  issue_time       DateTime?  @db.DateTime
+  flight           flight?    @relation(fields: [flight_id], references: [flight_id], onDelete: NoAction, onUpdate: NoAction, map: "FK__boarding___fligh__440B1D61")
+  passenger        passenger? @relation(fields: [passenger_id], references: [passenger_id], onDelete: NoAction, onUpdate: NoAction, map: "FK__boarding___passe__4316F928")
+}
+
+model flight {
+  flight_id         Int             @id(map: "PK__flight__E37057650EB0CD3D") @default(autoincrement())
+  flight_number     String?         @db.VarChar(10)
+  departure_airport String?         @db.VarChar(10)
+  arrival_airport   String?         @db.VarChar(10)
+  departure_time    DateTime?       @db.DateTime
+  arrival_time      DateTime?       @db.DateTime
+  aircraft_id       Int?
+  boarding_pass     boarding_pass[]
+  aircraft          aircraft?       @relation(fields: [aircraft_id], references: [aircraft_id], onDelete: NoAction, onUpdate: NoAction, map: "FK__flight__aircraft__403A8C7D")
+}
+
+model passenger {
+  passenger_id    Int             @id(map: "PK__passenge__0376458620D36B43") @default(autoincrement())
+  first_name      String?         @db.VarChar(50)
+  last_name       String?         @db.VarChar(50)
+  birth_date      DateTime?       @db.Date
+  passport_number String?         @unique(map: "UQ__passenge__D2CA6299E594051C") @db.VarChar(20)
+  boarding_pass   boarding_pass[]
+}
+
+model sys_user {
+  id          Int    @id(map: "PK__sys_user__3213E83FB6D57606") @default(autoincrement())
+  name        String @db.VarChar(255)
+  login_email String @unique(map: "UQ__sys_user__B3E4EDCD82AD0A61") @db.VarChar(150)
+  password    String @db.VarChar(255)
+  user_type   String @db.VarChar(10)
+}
