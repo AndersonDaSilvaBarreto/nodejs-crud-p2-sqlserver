@@ -89,8 +89,8 @@ export const deleteUser = async (id) => {
 };
 
 export const getAllUsers = async (query) => {
-  const page = parseInt(query.page) || 1;
-  const take = parseInt(query.take) || 10;
+  let page = parseInt(query.page) || 1;
+  let take = parseInt(query.take) || 10;
 
   if (page <= 0) page = 1;
   if (take <= 0) take = 10;

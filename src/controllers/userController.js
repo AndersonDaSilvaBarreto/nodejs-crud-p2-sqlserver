@@ -1,12 +1,10 @@
 import { userCreateSchema, userUpdateSchema } from "../schemas/userSchema.js";
 import * as UserService from "../services/userService.js";
-
 export const create = async (req, res) => {
   const result = userCreateSchema.safeParse(req.body);
-
   if (!result.success) {
     return res.status(400).json({
-      errors: result.error.format(),
+      errors: result.error.issues,
     });
   }
 
@@ -40,7 +38,7 @@ export const update = async (req, res) => {
   const result = userUpdateSchema.safeParse(req.body);
 
   if (!result.success) {
-    return res.status(400).json({ errors: result.error.format() });
+    return res.status(400).json({ errors: result.error.issues });
   }
 
   try {

@@ -1,8 +1,8 @@
 import { prisma } from "../libs/prisma.js";
 
 export const getAllAircraft = async (query) => {
-  const page = parseInt(query.page) || 1;
-  const take = parseInt(query.take) || 10; // 10 por página
+  let page = parseInt(query.page) || 1;
+  let take = parseInt(query.take) || 10; // 10 por página
 
   if (page <= 0) page = 1;
   if (take <= 0) take = 10;

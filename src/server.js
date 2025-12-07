@@ -17,7 +17,6 @@ server.use((req, res) => {
   res.status(404);
   res.json({ error: "Endpoint não encontrado." });
 });
-
 const PORTA = process.env.PORT;
 
 server.listen(PORTA, () => {
